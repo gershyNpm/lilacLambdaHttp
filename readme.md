@@ -1,3 +1,3 @@
-# TODO
+# Lilac Lambda Http
 
-Looks like someone needs to write this readme...
+Lambda specific to http requests.
