@@ -1,6 +1,6 @@
 {
   "name": "@gershy/lilac-lambda-http",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Gershom Maes",
   "description": "TODO",
   "keywords": [
@@ -18,8 +18,14 @@
   "files": [
     "cmp"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "@gershy/lilac-lambda": "^0.0.7"
+  },
   "devDependencies": {
+    "@gershy/disk": "^0.0.15",
+    "@gershy/logger": "^0.0.10",
+    "@gershy/util-codec-parse": "^0.0.7",
+    "@gershy/util-jsfn-encode": "^0.0.6",
     "@types/node": "^24.10.1"
   },
   "peerDependencies": {
