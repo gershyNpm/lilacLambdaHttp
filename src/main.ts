@@ -4,7 +4,7 @@ import type Logger from '@gershy/logger';
 import type { Codec } from '@gershy/util-codec-parse';
 import type { Jsfn } from '@gershy/util-jsfn-encode';
 
-type LambdaShapeHttp = LambdaShape & {
+export type LambdaHttpShape = LambdaShape & {
   
   ctx: {
     callbackWaitsForEmptyEventLoop: boolean,
@@ -59,13 +59,13 @@ type LambdaShapeHttp = LambdaShape & {
 };
 export class LambdaHttp<
   LocalData extends Jsfn,                      // Data provided to lambda by project
-  Res extends LambdaShapeHttp['invokeRes'], // The lambda's particular response
+  Res extends LambdaHttpShape['invokeRes'], // The lambda's particular response
   LaunchData,                                  // Arbitrary data initialized by lambda on cold-start
   Cdc extends Codec.Rec<any>,                  // Codec for validating incoming invocation args
   Env extends Obj<string>                      // Environment vars (main use-case is for passing arbitrary infra values to lambda)
-> extends LambdaBase<LambdaShapeHttp, Res, LocalData, LaunchData, Cdc, Env> {
+> extends LambdaBase<LambdaHttpShape, Res, LocalData, LaunchData, Cdc, Env> {
   
-  public getGenericCodecFn(): ReturnType<LambdaBase<any, any, any, any, any, any>['getGenericCodecFn']> {
+  public getGenericCodecFn() {
     
     return () => {
       
@@ -81,7 +81,7 @@ export class LambdaHttp<
           query:   builtStrsCodec,
           body:    { type: 'any' }
         }
-      };
+      } as const;
       
     };
     
@@ -89,7 +89,7 @@ export class LambdaHttp<
   
   public getInvokeWrapper() {
     
-    type LbdCls = typeof LambdaBase<LambdaShapeHttp, any, any, any, any, any>;
+    type LbdCls = typeof LambdaBase<LambdaHttpShape, any, any, any, any, any>;
     type LbdInvokeWrapper = ReturnType<InstanceType<LbdCls>['getInvokeWrapper']>;
     
     return (async (args: {
@@ -99,8 +99,8 @@ export class LambdaHttp<
       logger:     Logger,
       codec:      Cdc,
       launchData: LaunchData,
-      shapeData:  Pick<LambdaShapeHttp, 'ctx' | 'req'>,
-      invokeFn:   LambdaBase<LambdaShapeHttp, Res, LocalData, LaunchData, Cdc, Env>['invokeFn']
+      shapeData:  Pick<LambdaHttpShape, 'ctx' | 'req'>,
+      invokeFn:   LambdaBase<LambdaHttpShape, Res, LocalData, LaunchData, Cdc, Env>['invokeFn']
       
     }) => {
       
@@ -138,12 +138,12 @@ export class LambdaHttp<
         
         const build = <O extends Obj<any>>(obj: O) => {
           
-          // Convert:
+          // Convert ("linear"):
           //    | {
           //    |   'a.b.c': 1,
           //    |   'a.x.y': 2
           //    | }
-          // To:
+          // To ("nested"):
           //    | { a: { b: { c: 1 }, x: { y: 2 } } }
           
           type Built<T> = T | { [K: string]: Built<T> };
