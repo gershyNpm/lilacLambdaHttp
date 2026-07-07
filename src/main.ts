@@ -89,7 +89,7 @@ export class LambdaHttp<
   
   public getInvokeWrapper() {
     
-    type LbdCls = typeof LambdaBase<LambdaHttpShape, any, any, any, any, any>;
+    type LbdCls = typeof LambdaBase<LambdaHttpShape, Res, LocalData, LaunchData, Cdc, Env>;
     type LbdInvokeWrapper = ReturnType<InstanceType<LbdCls>['getInvokeWrapper']>;
     
     return (async (args: {
