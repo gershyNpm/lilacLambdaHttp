@@ -49,20 +49,20 @@ export type LambdaHttpShape = LambdaShape & {
     headers: { [K: string]: string | string[] },
     isBase64Encoded?: boolean
     body: Json,
-  },
-  
-  invokeRes: { code: number, headers?: Obj<string> } & (
-    | { base64?: false, body: Json }
-    | { base64:  true,  body: string | ArrayBuffer }
-  )
+  }
   
 };
+export type LambdaHttpRes = { code: number, headers?: Obj<string> } & (
+  | { base64?: false, body: Json }
+  | { base64:  true,  body: string | ArrayBuffer }
+);
+
 export class LambdaHttp<
-  LocalData extends Jsfn,                      // Data provided to lambda by project
-  Res extends LambdaHttpShape['invokeRes'], // The lambda's particular response
-  LaunchData,                                  // Arbitrary data initialized by lambda on cold-start
-  Cdc extends Codec.Rec<any>,                  // Codec for validating incoming invocation args
-  Env extends Obj<string>                      // Environment vars (main use-case is for passing arbitrary infra values to lambda)
+  LocalData extends Jsfn,     // Data provided to lambda by project
+  Res extends LambdaHttpRes,  // The lambda's particular response
+  LaunchData,                 // Arbitrary data initialized by lambda on cold-start
+  Cdc extends Codec.Rec<any>, // Codec for validating incoming invocation args
+  Env extends Obj<string>     // Environment vars (main use-case is for passing arbitrary infra values to lambda)
 > extends LambdaBase<LambdaHttpShape, Res, LocalData, LaunchData, Cdc, Env> {
   
   public getGenericCodecFn() {
