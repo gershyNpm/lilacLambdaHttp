@@ -3,7 +3,7 @@ import { assertEqual, cmpJson, testRunner } from '../build/utils.test.ts';
 import { JsfnUtility } from './import.test.ts';
 import { LambdaHttp } from './main.ts';
 import { rootFact, tempFact } from '@gershy/disk';
-import codecParse, { type Codec } from '@gershy/util-codec-parse';
+import codecParse from '@gershy/util-codec-parse';
 
 // Type testing
 (async () => {
@@ -31,7 +31,7 @@ testRunner([
         z: 'hi',
         utility: new JsfnUtility({ a: 'util' })
       },
-      codec: { type: 'rec', props: { body: { type: 'rec' as const, props: { b: { type: 'num' as const } } } }, loose: true } as const,
+      codec: { type: 'rec', loose: true, props: { body: { type: 'rec' as const, props: { b: { type: 'num' as const } } } } } as const,
       launchFn: args => ({ utility: args.localData.utility, res: { code: 200 } }),
       invokeFn: ({ launchData, args }) => {
         
@@ -61,21 +61,6 @@ testRunner([
       },
       lang: 'js'
     });
-    
-    let builtStrsCodec: Codec.Map<any> = { type: 'map', item: {
-      type: 'oneOf',
-      opts: [
-        { type: 'str' },
-        // { type: 'map', item: {
-        //   type: 'oneOf',
-        //   opts: [
-        //     { type: 'str' },
-        //     { type: 'map', item: { type: 'str' }}
-        //   ]
-        // }}
-      ]
-    }};
-    builtStrsCodec.item.opts.push(builtStrsCodec);
     
     const require = (term: string) => {
       if (term === '@gershy/clearing') return null;
