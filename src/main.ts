@@ -1,10 +1,10 @@
 import '@gershy/clearing';
-import { LambdaBase, type LambdaShape } from '@gershy/lilac-lambda';
+import { LambdaBase, type LambdaNativeShape } from '@gershy/lilac-lambda';
 import type Logger from '@gershy/logger';
 import type { Codec } from '@gershy/util-codec-parse';
 import type { Jsfn } from '@gershy/util-jsfn-encode';
 
-export type LambdaHttpShape = LambdaShape & {
+export type LambdaHttpShape = LambdaNativeShape & {
   
   ctx: {
     callbackWaitsForEmptyEventLoop: boolean,
@@ -65,28 +65,6 @@ export class LambdaHttp<
   Env extends Obj<string>     // Environment vars (main use-case is for passing arbitrary infra values to lambda)
 > extends LambdaBase<LambdaHttpShape, Res, LocalData, LaunchData, Cdc, Env> {
   
-  public getGenericCodecFn() {
-    
-    return () => {
-      
-      let builtStrsCodec: Codec.Map<any> = { type: 'map', item: { type: 'oneOf', opts: [ { type: 'str' } ] }};
-      builtStrsCodec.item.opts.push(builtStrsCodec);
-      return {
-        type: 'rec',
-        props: {
-          path:    { type: 'arr',  item: { type: 'str' } },
-          method:  { type: 'enum', opts: [ 'head', 'get', 'post', 'put', 'patch', 'delete' ] },
-          headers: { type: 'map',  item: { type: 'arr', item: { type: 'str' } } },
-          cookies: builtStrsCodec,
-          query:   builtStrsCodec,
-          body:    { type: 'any' }
-        }
-      } as const;
-      
-    };
-    
-  }
-  
   public getInvokeWrapper() {
     
     type LbdCls = typeof LambdaBase<LambdaHttpShape, Res, LocalData, LaunchData, Cdc, Env>;
@@ -125,6 +103,23 @@ export class LambdaHttp<
       const { jsfnImport, debug, codec, launchData, shapeData, invokeFn } = args;
       const { ctx, req } = shapeData;
       const logger = args.logger.kid('invoke');
+      // const nativeCodec = (() => {
+      //   
+      //   let builtStrsCodec: Codec.Map<any> = { type: 'map', item: { type: 'oneOf', opts: [ { type: 'str' } ] }};
+      //   builtStrsCodec.item.opts.push(builtStrsCodec);
+      //   return {
+      //     type: 'rec',
+      //     props: {
+      //       path:    { type: 'arr',  item: { type: 'str' } },
+      //       method:  { type: 'enum', opts: [ 'head', 'get', 'post', 'put', 'patch', 'delete' ] },
+      //       headers: { type: 'map',  item: { type: 'arr', item: { type: 'str' } } },
+      //       cookies: builtStrsCodec,
+      //       query:   builtStrsCodec,
+      //       body:    { type: 'any' }
+      //     }
+      //   } as const;
+      //   
+      // })();
       
       const { code, headers = {}, body, base64 = false } = await (async (): Promise<Res> => {
         
@@ -190,15 +185,13 @@ export class LambdaHttp<
           
         };
         
-        const dbgArgs = args[slash]([ 'headers' ]);
-        
         try {
           
-          logger.log({ $$: 'launch', debug, args: dbgArgs });
+          logger.log({ $$: 'launch', debug, args: args[slash]([ 'headers' ]) });
           
-          const parsedArgs = codecParse(codec, args);
+          const instanceReq = codecParse(codec, args);
           
-          const res = await invokeFn({ debug, logger, jsfnImport, shapeData: { ctx, req }, launchData, args: parsedArgs });
+          const res = await invokeFn({ debug, logger, jsfnImport, shapeData: { ctx, req }, launchData, args: instanceReq });
           logger.log({ $$: 'accept', ms: Date.now() - ms, res });
           return res;
           

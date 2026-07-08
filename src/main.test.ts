@@ -31,7 +31,7 @@ testRunner([
         z: 'hi',
         utility: new JsfnUtility({ a: 'util' })
       },
-      codec: { type: 'rec' as const, props: { body: { type: 'rec' as const, props: { b: { type: 'num' as const } } } } },
+      codec: { type: 'rec', props: { body: { type: 'rec' as const, props: { b: { type: 'num' as const } } } }, loose: true } as const,
       launchFn: args => ({ utility: args.localData.utility, res: { code: 200 } }),
       invokeFn: ({ launchData, args }) => {
         
@@ -114,7 +114,7 @@ testRunner([
           'User-Agent': [ 'its a test lmao' ],
           'Cookie': [
             'k0=cookie0;k1=cookie1;',
-            ';;;   ;  k2=cookie2   ; k4 = cookie444  ;;    ;',
+            ';;;   ;  k2=cookie2   ; k4.k5.k6 = cookie444  ;;    ;',
             ';',
             ' =j  =  ',
             '   ;;;;;'
@@ -149,7 +149,7 @@ testRunner([
           query: {
             built: { query: { string: 'test' } }
           },
-          cookies: { k0: 'cookie0', k1: 'cookie1', k2: 'cookie2', k4: 'cookie444' },
+          cookies: { k0: 'cookie0', k1: 'cookie1', k2: 'cookie2', k4: { k5: { k6: 'cookie444' } } },
           body: { b: 10 }
         }
       }],
@@ -157,6 +157,8 @@ testRunner([
       statusCode: 200
     });
     
-  }}
+  }},
+  
+  // TODO: should probably include a heavy localstack test...
   
 ]);
