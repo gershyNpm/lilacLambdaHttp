@@ -58,8 +58,8 @@ export type LambdaHttpRes = { code: number, headers?: Obj<string> } & (
 );
 
 export class LambdaHttp<
-  LocalData extends Jsfn,     // Data provided to lambda by project
   Res extends LambdaHttpRes,  // The lambda's particular response
+  LocalData extends Jsfn,     // Data provided to lambda by project
   LaunchData,                 // Arbitrary data initialized by lambda on cold-start
   Cdc extends Codec.Rec<any>, // Codec for validating incoming invocation args
   Env extends Obj<string>     // Environment vars (main use-case is for passing arbitrary infra values to lambda)

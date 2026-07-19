@@ -1,6 +1,6 @@
 {
   "name": "@gershy/lilac-lambda-http",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "author": "Gershom Maes",
   "description": "TODO",
   "keywords": [
@@ -19,17 +19,17 @@
     "cmp"
   ],
   "dependencies": {
-    "@gershy/lilac-lambda": "^0.0.19"
+    "@gershy/lilac-lambda": "^0.0.20"
   },
   "devDependencies": {
-    "@gershy/disk": "^0.0.19",
-    "@gershy/logger": "^0.0.14",
-    "@gershy/util-codec-parse": "^0.0.14",
-    "@gershy/util-jsfn-encode": "^0.0.11",
+    "@gershy/disk": "^0.0.27",
+    "@gershy/logger": "^0.0.15",
+    "@gershy/util-codec-parse": "^0.0.15",
+    "@gershy/util-jsfn-encode": "^0.0.12",
     "@types/node": "^24.10.1"
   },
   "peerDependencies": {
-    "@gershy/clearing": "^0.0.46"
+    "@gershy/clearing": "^0.0.47"
   },
   "scripts": {
     "test": "npm run ts.check && npx tsx ./src/main.test.ts",

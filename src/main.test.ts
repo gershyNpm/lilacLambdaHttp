@@ -2,7 +2,6 @@ import Logger from '@gershy/logger';
 import { assertEqual, cmpJson, testRunner } from '../build/utils.test.ts';
 import { JsfnUtility } from './import.test.ts';
 import { LambdaHttp } from './main.ts';
-import { rootFact, tempFact } from '@gershy/disk';
 import codecParse from '@gershy/util-codec-parse';
 
 // Type testing
@@ -24,6 +23,8 @@ testRunner([
     // Instantiates a `JsfnUtility` instance with `a = 'util'`, and takes an http body param `b`,
     // which is a number, to call `JsfnUtility.prototype.helperFn`, which returns `a.repeat(b)`
     const lbd = new LambdaHttp({
+      soil: { getRegion: () => 'ca-central-1' } as any,
+      context: { pfx: 'testlilaclambdahttpsourcecodegen' } as any,
       name: 'myLbd',
       baseUrl: import.meta.url,
       memoryMb: 128,
@@ -47,20 +48,7 @@ testRunner([
       env: {}
     });
     
-    const script = await lbd.getScript({
-      ctx: {
-        name:      'test',
-        logger:    new Logger('test'),
-        fact:      rootFact.kid([ import.meta.dirname, 'infra' ]),
-        patioFact: rootFact.kid([ import.meta.dirname, 'infra', 'patio' ]),
-        shedFact:  tempFact.kid([ '@gershy' ]),
-        
-        maturity: 'm0',
-        debug: true,
-        pfx: 'test'
-      },
-      lang: 'js'
-    });
+    const script = await lbd.getScript({ lang: 'js' });
     
     const require = (term: string) => {
       if (term === '@gershy/clearing') return null;
