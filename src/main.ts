@@ -30,13 +30,6 @@ export type LambdaHttpShape = LambdaNativeShape & {
       stage:      string,
       domainName: string,
       resourceId: `${'GET' | 'POST' | 'PUT'} /${string}`,
-        
-      // TODO: Websockets should be handled in a separate lambda subclass
-      // // These show up for socket connections:
-      // routeKey?:     '$connect' | '$disconnect' | string,
-      // eventType?:    'CONNECT' | 'DISCONNECT' | string,
-      // connectedAt?:  number,
-      // connectionId?: string,
       
       stageVariables: Obj<string>
       
@@ -190,7 +183,6 @@ export class LambdaHttp<
           logger.log({ $$: 'launch', debug, args: args[slash]([ 'headers' ]) });
           
           const instanceReq = codecParse(codec, args);
-          
           const res = await invokeFn({ debug, logger, jsfnImport, shapeData: { ctx, req }, launchData, args: instanceReq });
           logger.log({ $$: 'accept', ms: Date.now() - ms, res });
           return res;
