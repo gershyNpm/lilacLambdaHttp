@@ -45,8 +45,10 @@ entry({ name: 'lilacLambdaHttp', codec, inp: { reg: '^', effort: 0 }, fn: async 
       // Instantiates a `JsfnUtility` instance with `a = 'util'`, and takes an http body param `b`,
       // which is a number, to call `JsfnUtility.prototype.helperFn`, which returns `a.repeat(b)`
       const lbd = new LambdaHttp({
-        soil: { getRegion: () => 'ca-central-1' } as any,
-        context: { pfx: 'testlilaclambdahttpsourcecodegen' } as any,
+        garden: {
+          pfx: 'testlilaclambdahttpsourcecodegen',
+          defaults: { region: 'ca-central-1' }
+        } as any,
         name: 'myLbd',
         baseUrl: import.meta.url,
         memoryMb: 128,
