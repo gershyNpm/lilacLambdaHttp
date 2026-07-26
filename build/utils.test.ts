@@ -199,10 +199,8 @@ export const testRunner = async <Inp = null>(inp: TestRunnerInp<Inp>) => {
     let numRan = 0;
     for (const [ n, c ] of cases.entries()) await logger.scope(n.toString(), { name: c.name, effort: c.effort ?? 0 }, async logger => {
       
-      if (!reg.test(c.name) || (c.effort ?? 0) > effort) {
-        logger.log({ $$: 'skipped' });
-        return;
-      }
+      if (!reg.test(c.name))        { logger.log({ $$: 'skipped', name: c.name, reg: `/${reg.source}/`     }); return; }
+      if ((c.effort ?? 0) > effort) { logger.log({ $$: 'skipped', effort: c.effort ?? 0, maxEffort: effort }); return; }
       
       numRan++;
       await c.fn(logger, testInp);
