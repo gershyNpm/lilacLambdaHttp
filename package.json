@@ -1,6 +1,6 @@
 {
   "name": "@gershy/lilac-lambda-http",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "author": "Gershom Maes",
   "description": "TODO",
   "keywords": [
@@ -26,7 +26,7 @@
     "@gershy/entry": "^0.0.24",
     "@gershy/logger": "^0.0.22",
     "@gershy/util-codec-parse": "^0.0.22",
-    "@gershy/util-jsfn-encode": "^0.0.20",
+    "@gershy/util-jsfn-encode": "^0.0.21",
     "@types/node": "^24.10.1"
   },
   "peerDependencies": {

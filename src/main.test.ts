@@ -46,7 +46,7 @@ entry({ name: 'lilacLambdaHttp', codec, inp: { reg: '^', effort: 0 }, fn: async 
       // which is a number, to call `JsfnUtility.prototype.helperFn`, which returns `a.repeat(b)`
       const lbd = new LambdaHttp({
         garden: {
-          pfx: 'testlilaclambdahttpsourcecodegen',
+          pfx: 'lilacLambdaTestSourceCodeGen',
           defaults: { region: 'ca-central-1' }
         } as any,
         name: 'myLbd',
