@@ -1,6 +1,6 @@
 {
   "name": "@gershy/lilac-lambda-http",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "author": "Gershom Maes",
   "description": "TODO",
   "keywords": [
@@ -22,7 +22,7 @@
     "@gershy/lilac-lambda": "^0.0.30"
   },
   "devDependencies": {
-    "@gershy/disk": "^0.0.38",
+    "@gershy/disk": "^0.0.39",
     "@gershy/entry": "^0.0.25",
     "@gershy/logger": "^0.0.22",
     "@gershy/util-codec-parse": "^0.0.22",
